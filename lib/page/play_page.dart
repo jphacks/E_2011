@@ -24,13 +24,16 @@ class PlayPage extends StatefulWidget {
 }
 
 const List<String> baseThemeList = [
-  '生麦生米生卵',
-  '隣の客はよく柿食う客だ',
-  'バスガス爆発',
-  '赤パジャマ黄パジャマ青パジャマ',
-  '赤巻紙青巻紙黄巻紙',
-  '老若男女',
-  '旅客機の旅客'
+  'らりるれろ',
+  'たちつてと',
+  'なにぬねの',
+  // '生麦生米生卵',
+  // '隣の客はよく柿食う客だ',
+  // 'バスガス爆発',
+  // '赤パジャマ黄パジャマ青パジャマ',
+  // '赤巻紙青巻紙黄巻紙',
+  // '老若男女',
+  // '旅客機の旅客'
 ];
 
 const List<String> advancedThemeList = [
@@ -68,6 +71,7 @@ class _PlayPage extends State<PlayPage> with SingleTickerProviderStateMixin {
   int _current = 5;
   int _limitsDecreaseHP = 0;
   int _stageLevel;
+  bool _complete = false;
   var _sub;
   var UserData;
   // ③ カウントダウン処理を行う関数を定義
@@ -164,9 +168,8 @@ class _PlayPage extends State<PlayPage> with SingleTickerProviderStateMixin {
         'assets/images/level1-00_enemy.png',
         'assets/images/level1-01_enemy.png',
         'assets/images/level1-02_enemy.png',
-        'assets/images/kaiju.png',
-        'assets/images/kaiju1.png',
-        'assets/images/kaiju2.png',
+        'assets/images/level1-03_enemy.png',
+        'assets/images/level1-04_enemy.png',
       ];
   }
 
@@ -177,8 +180,9 @@ class _PlayPage extends State<PlayPage> with SingleTickerProviderStateMixin {
         'assets/images/level1-00_back.png',
         'assets/images/level1-00_back.png',
         'assets/images/level2-00_back.png',
-        'assets/images/level2-01_back.png',
-        'assets/images/level2-02_back.png'];
+        'assets/images/level2-00_back.png',
+        'assets/images/level2-00_back.png'
+      ];
   }
 
   @override
@@ -208,8 +212,8 @@ class _PlayPage extends State<PlayPage> with SingleTickerProviderStateMixin {
     _speech = new SpeechRecognition();
     _speech.setAvailabilityHandler(onSpeechAvailability);
     _speech.setRecognitionStartedHandler(onRecognitionStarted);
-    _speech.setRecognitionStartedHandler(attack);
     _speech.setRecognitionResultHandler(onRecognitionResult);
+    // _speech.setRecognitionResultHandler(attack);
     _speech.setRecognitionCompleteHandler(onRecognitionComplete);
     _speech.setErrorHandler(errorHandler);
     _speech.activate('ja_JA').then((res) {
@@ -391,6 +395,7 @@ class _PlayPage extends State<PlayPage> with SingleTickerProviderStateMixin {
         stop();
         _current = 5;
         _hp = _hp - 1;
+        _complete = true;
         if (_hp == 0) {
           // assetsAudioPlayer.stop();
           // assetsAudioPlayer.open(
@@ -437,16 +442,21 @@ class _PlayPage extends State<PlayPage> with SingleTickerProviderStateMixin {
 
   void onRecognitionResult(String text) {
     print('_MyAppState.onRecognitionResult... $text');
-    _limitsDecreaseHP += 1;
-    if (_limitsDecreaseHP == 1) {
-      setState(() => attack(text));
+    if(text == _themeText) {
+      _limitsDecreaseHP += 1;
+      if (_limitsDecreaseHP == 1) {
+        setState(() => attack(text));
+      }
     }
   }
 
   void onRecognitionComplete(String text) {
     print('_MyAppState.onRecognitionComplete... $text');
     setState(() {
+      if(_complete){
         finishTimer();
+      }
+      _complete = false;
       _isListening = false;
     });
   }
