@@ -30,7 +30,7 @@ class NormalHomePanel extends StatelessWidget {
         body: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/play_back.png"),
+                image: AssetImage("assets/images/normal_play_back.png"),
                 fit: BoxFit.cover,
               ),
             ),

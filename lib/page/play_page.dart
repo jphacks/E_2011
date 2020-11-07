@@ -385,8 +385,9 @@ class _PlayPage extends State<PlayPage> with SingleTickerProviderStateMixin {
   }
 
   void attack(String text) async {
+    transcription = text;
     if (_isListening) {
-      await Future.delayed(Duration(milliseconds: 1500));
+      await Future.delayed(Duration(milliseconds: 500));
       stop();
     }
     if (_themeText == transcription) {
